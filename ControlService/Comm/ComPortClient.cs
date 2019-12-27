@@ -23,44 +23,9 @@ namespace ControlService.Comm
         {
             cfg = _Config;
             ConnReport = _ConnReport;
-            Parity p = Parity.None;
-            //switch (_Config.ParityBit)
-            //{
-            //    case "Even":
-            //        p = Parity.Even;
-            //        break;
-            //    case "Mark":
-            //        p = Parity.Mark;
-            //        break;
-            //    case "None":
-            //        p = Parity.None;
-            //        break;
-            //    case "Odd":
-            //        p = Parity.Odd;
-            //        break;
-            //    case "Space":
-            //        p = Parity.Space;
-            //        break;
-            //}
-            StopBits s = StopBits.One;
-            //switch (_Config.StopBit)
-            //{
-            //    case "None":
-            //        s = StopBits.None;
-            //        break;
-            //    case "One":
-            //        s = StopBits.One;
-            //        break;
-            //    case "OnePointFive":
-            //        s = StopBits.OnePointFive;
-            //        break;
-            //    case "Two":
-            //        s = StopBits.Two;
-            //        break;
-            //}
+       
 
-
-            port = new SerialPort(_Config.GetPortName(), _Config.GetBaudRate(), p, 8, s);
+            port = new SerialPort(_Config.GetPortName(), _Config.GetBaudRate(), Parity.None, 8, StopBits.One);
             if (_Config.GetVendor().Equals("SMARTTAG"))
             {
                 port.Handshake = Handshake.None;
@@ -78,17 +43,7 @@ namespace ControlService.Comm
 
         public void Reconnect()
         {
-            //port.Close();
-            //ConnReport.On_Connection_Disconnected("Close");
-
-            //port = new SerialPort(cfg.GetPortName(), cfg.GetBaudRate(), Parity.None, 8, StopBits.One);
-            //if (cfg.GetVendor().Equals("SMARTTAG"))
-            //{
-            //    port.Handshake = Handshake.None;
-            //    port.RtsEnable = true;
-            //    port.ReadTimeout = 5000;
-            //    port.WriteTimeout = 5000;
-            //}
+            Start();
         }
 
         public void Start()
@@ -98,6 +53,19 @@ namespace ControlService.Comm
                 Thread ComTd = new Thread(ConnectServer);
                 ComTd.IsBackground = true;
                 ComTd.Start();
+            }
+        }
+
+        public void Close()
+        {
+            try
+            {
+                port.Close();
+                port = new SerialPort(cfg.GetPortName(), cfg.GetBaudRate(), Parity.None, 8, StopBits.One);
+            }
+            catch (Exception e)
+            {
+                ConnReport.On_Connection_Error("(Close )" + e.Message + "\n" + e.StackTrace);
             }
         }
 
@@ -178,6 +146,7 @@ namespace ControlService.Comm
             catch (Exception e)
             {
                 //logger.Error("(ConnectServer " + RmIp + ":" + SPort + ")" + e.Message + "\n" + e.StackTrace);
+                SpinWait.SpinUntil(() => false, 3000);
                 ConnReport.On_Connection_Error("(ConnectServer )" + e.Message + "\n" + e.StackTrace);
             }
         }
@@ -258,7 +227,7 @@ namespace ControlService.Comm
                 //        break;
                 //    case "SanwaController":
                 //data = port.ReadTo(((char)3).ToString());
-                while (((readB[currentIdx] = Convert.ToByte(port.ReadByte())) != 3) || (readB[1]==105 && currentIdx < 7))
+                while (((readB[currentIdx] = Convert.ToByte(port.ReadByte())) != 3) || (readB[1] == 105 && currentIdx < 7))
                 {
 
                     currentIdx++;

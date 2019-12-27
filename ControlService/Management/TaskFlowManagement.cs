@@ -5,6 +5,7 @@ using System.Linq;
 using ControlService.Config;
 using ControlService.TaksFlow;
 using System.Threading;
+using ControlService.Engine;
 
 namespace ControlService.Management
 {
@@ -27,7 +28,9 @@ namespace ControlService.Management
 
             public void Wait()
             {
+                logger.Debug("Task start");
                 SpinWait.SpinUntil(() => this.Finished, 999999999);
+                logger.Debug("Task finished");
             }
         }
         public class ExcutedCmd
@@ -44,8 +47,8 @@ namespace ControlService.Management
             public string ExcuteType { get; set; }
             public Transaction Txn { get; set; }
             public bool Finished = false;
-          
-          
+
+
         }
         public static void SetReport(ITaskFlowReport TaskReport)
         {
@@ -128,6 +131,7 @@ namespace ControlService.Management
         public static CurrentProcessTask Excute(string Id, Command TaskName, Dictionary<string, string> param = null)
         {
             CurrentProcessTask result = null;
+
             lock (CurrentProcessTasks)
             {
                 if (!CurrentProcessTasks.ContainsKey(Id))
@@ -148,6 +152,7 @@ namespace ControlService.Management
                     logger.Error("ID is exsit:" + Id);
                 }
             }
+
             return result;
         }
         public enum Command
@@ -257,6 +262,7 @@ namespace ControlService.Management
             RELEASE_PTZ,
             PORT_ACCESS_MODE,
             RESET_E84,
+            E84_MODE,
             BLOCK_ALIGNER,
             RELEASE_ALIGNER,
             //WTS Manual
@@ -311,7 +317,8 @@ namespace ControlService.Management
             FOUPROBOT_RESET,
             FOUPROBOT_SET_SPEED,
             GET_IO,
-            SET_IO
+            SET_IO,
+            CONTROL_MODE
         }
     }
 }

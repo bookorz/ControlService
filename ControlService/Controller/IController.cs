@@ -26,6 +26,7 @@ namespace ControlService.Controller
         string GetStatus();
         void SetStatus(string Status);
         void Start(object state);
+        void Close();
         bool DoWork(Transaction Txn,bool WaitForData = false);
         string GetNextSeq();
         void Reconnect();

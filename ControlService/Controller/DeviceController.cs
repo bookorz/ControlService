@@ -17,7 +17,7 @@ namespace ControlService.Controller
         private static readonly ILog logger = LogManager.GetLogger(typeof(DeviceController));
         public ICommandReport _ReportTarget;
         IConnection conn;
-
+        private bool keepOnline = true;
         CommandDecoder _Decoder;
         public CommandEncoder Encoder;
         ConcurrentDictionary<string, Transaction> TransactionList = new ConcurrentDictionary<string, Transaction>();
@@ -141,6 +141,20 @@ namespace ControlService.Controller
 
             }
         }
+        public void Close()
+        {
+            try
+            {
+                keepOnline = false;
+                conn.Close();
+            }
+            catch (Exception e)
+            {
+
+                logger.Error(DeviceName + "(DisconnectServer " + IPAdress + ":" + Port.ToString() + ")" + e.Message + "\n" + e.StackTrace);
+
+            }
+        }
 
         //public void Connect()
         //{
@@ -160,7 +174,7 @@ namespace ControlService.Controller
         {
             try
             {
-
+                keepOnline = true;
                 conn.Start();
             }
             catch (Exception e)
@@ -870,7 +884,10 @@ namespace ControlService.Controller
             ChangeNodeConnectionStatus("Disconnected");
             _ReportTarget.On_Controller_State_Changed(DeviceName, "Disconnected");
             _ReportTarget.On_Message_Log("CMD", DeviceName + " " + "Disconnected");
-            conn.Reconnect();
+            if (keepOnline)
+            {
+                conn.Reconnect();
+            }
         }
 
         public void On_Connection_Error(string Msg)
@@ -884,7 +901,10 @@ namespace ControlService.Controller
             ChangeNodeConnectionStatus("Connection_Error");
             _ReportTarget.On_Controller_State_Changed(DeviceName, "Connection_Error");
             _ReportTarget.On_Message_Log("CMD", DeviceName + " " + "Connection_Error");
-            conn.Reconnect();
+            if (keepOnline)
+            {
+                conn.Reconnect();
+            }
         }
 
         public void On_Transaction_TimeOut(Transaction Txn)

@@ -58,6 +58,15 @@ namespace ControlService.Comm
             checkSocketState();
             //ThreadPool.QueueUserWorkItem(new WaitCallback(FirstCheck));
         }
+        public void Close()
+        {
+            if (socketDisconnected != null)
+            {
+                IsconnectSuccess = false;
+                theSocket.Disconnect(true);
+                ConnReport.On_Connection_Disconnected("Disconnected");
+            }
+        }
 
         public void WaitForData(bool Enable)
         {

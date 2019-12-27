@@ -11,6 +11,7 @@ namespace ControlService.Comm
         bool Send(object Message);
         bool SendHexData(object Message);
         void Start();
+        void Close();
         void WaitForData(bool Enable);
         void Reconnect();
     }

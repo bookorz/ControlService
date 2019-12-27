@@ -46,6 +46,18 @@ namespace ControlService.Management
 
         public class Command
         {
+            public class E84
+            {
+                public const string Reset = "Reset";
+                public const string AutoMode = "AutoMode";
+                public const string ManualMode = "ManualMode";
+                public const string SetTP1 = "SetTP1";
+                public const string SetTP2 = "SetTP2";
+                public const string SetTP3 = "SetTP3";
+                public const string SetTP4 = "SetTP4";
+                public const string SetTP5 = "SetTP5";
+                public const string SetTP6 = "SetTP6";
+            }
             public class WTSAligner
             {
                 public const string Align = "Align";

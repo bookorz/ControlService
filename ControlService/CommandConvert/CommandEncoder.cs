@@ -22,6 +22,7 @@ namespace ControlService.CommandConvert
         public Encoder_Shelf Shelf;
         public Encoder_WHR WHR;
         public Encoder_WTSAligner WTSAligner;
+        public Encoder_E84 E84;
 
 
 
@@ -54,6 +55,7 @@ namespace ControlService.CommandConvert
                 Shelf = new Encoder_Shelf(Supplier);
                 WHR = new Encoder_WHR(Supplier);
                 WTSAligner = new Encoder_WTSAligner(Supplier);
+                E84 = new Encoder_E84(Supplier);
             }
             catch (Exception ex)
             {

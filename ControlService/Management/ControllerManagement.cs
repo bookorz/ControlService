@@ -114,7 +114,13 @@ namespace ControlService.Management
                 ThreadPool.QueueUserWorkItem(new WaitCallback(each.Start));
             }
         }
-
+        public static void DisconnectAll()
+        {
+            foreach (IController each in Controllers.Values.ToList())
+            {
+                each.Close();
+            }
+        }
         //public static void ConnectAll()
         //{
         //    foreach (DeviceController each in Controllers.Values.ToList())
@@ -134,8 +140,8 @@ namespace ControlService.Management
         //    }
         //}
 
-        
 
-      
+
+
     }
 }

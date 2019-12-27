@@ -38,15 +38,15 @@ namespace ControlService.CommandConvert
             }
             return result;
         }
-        public string Reset()
+        public string Reset(string AddrNo)
         {
             string commandStr = "";
             switch (Supplier)
             {
                 case "SANWA_MC":
 
-                    commandStr = "$1GET:E84__:6,550400bb";
-                    commandStr = string.Format(commandStr);
+                    commandStr = "$1GET:E84__:{0},550400bb";
+                    commandStr = string.Format(commandStr,AddrNo);
                     break;
                 default:
                     throw new NotSupportedException();
@@ -54,15 +54,15 @@ namespace ControlService.CommandConvert
 
             return commandStr + EndCode();
         }
-        public string AutoMode()
+        public string AutoMode(string AddrNo)
         {
             string commandStr = "";
             switch (Supplier)
             {
                 case "SANWA_MC":
 
-                    commandStr = "$1GET:E84__:6,550100bb";
-                    commandStr = string.Format(commandStr);
+                    commandStr = "$1GET:E84__:{0},550100bb";
+                    commandStr = string.Format(commandStr, AddrNo);
                     break;
                 default:
                     throw new NotSupportedException();
@@ -70,15 +70,15 @@ namespace ControlService.CommandConvert
 
             return commandStr + EndCode();
         }
-        public string ManualMode()
+        public string ManualMode(string AddrNo)
         {
             string commandStr = "";
             switch (Supplier)
             {
                 case "SANWA_MC":
 
-                    commandStr = "$1GET:E84__:6,550200bb";
-                    commandStr = string.Format(commandStr);
+                    commandStr = "$1GET:E84__:{0},550200bb";
+                    commandStr = string.Format(commandStr, AddrNo);
                     break;
                 default:
                     throw new NotSupportedException();
@@ -86,15 +86,15 @@ namespace ControlService.CommandConvert
 
             return commandStr + EndCode();
         }
-        public string SetTP1(string value)
+        public string SetTP1(string AddrNo, string value)
         {
             string commandStr = "";
             switch (Supplier)
             {
                 case "SANWA_MC":
 
-                    commandStr = "$1GET:E84__:6,5570{0}bb";
-                    commandStr = string.Format(commandStr,Convert.ToInt16(value).ToString("X2"));
+                    commandStr = "$1GET:E84__:{0},5570{1}bb";
+                    commandStr = string.Format(commandStr, AddrNo, Convert.ToInt16(value).ToString("X2"));
                     break;
                 default:
                     throw new NotSupportedException();
@@ -102,15 +102,15 @@ namespace ControlService.CommandConvert
 
             return commandStr + EndCode();
         }
-        public string SetTP2(string value)
+        public string SetTP2(string AddrNo,string value)
         {
             string commandStr = "";
             switch (Supplier)
             {
                 case "SANWA_MC":
 
-                    commandStr = "$1GET:E84__:6,5571{0}bb";
-                    commandStr = string.Format(commandStr, Convert.ToInt16(value).ToString("X2"));
+                    commandStr = "$1GET:E84__:{0},5571{1}bb";
+                    commandStr = string.Format(commandStr, AddrNo, Convert.ToInt16(value).ToString("X2"));
                     break;
                 default:
                     throw new NotSupportedException();
@@ -118,15 +118,15 @@ namespace ControlService.CommandConvert
 
             return commandStr + EndCode();
         }
-        public string SetTP3(string value)
+        public string SetTP3(string AddrNo,string value)
         {
             string commandStr = "";
             switch (Supplier)
             {
                 case "SANWA_MC":
 
-                    commandStr = "$1GET:E84__:6,5572{0}bb";
-                    commandStr = string.Format(commandStr, Convert.ToInt16(value).ToString("X2"));
+                    commandStr = "$1GET:E84__:{0},5572{1}bb";
+                    commandStr = string.Format(commandStr, AddrNo, Convert.ToInt16(value).ToString("X2"));
                     break;
                 default:
                     throw new NotSupportedException();
@@ -134,15 +134,15 @@ namespace ControlService.CommandConvert
 
             return commandStr + EndCode();
         }
-        public string SetTP4(string value)
+        public string SetTP4(string AddrNo,string value)
         {
             string commandStr = "";
             switch (Supplier)
             {
                 case "SANWA_MC":
 
-                    commandStr = "$1GET:E84__:6,5573{0}bb";
-                    commandStr = string.Format(commandStr, Convert.ToInt16(value).ToString("X2"));
+                    commandStr = "$1GET:E84__:{0},5573{1}bb";
+                    commandStr = string.Format(commandStr, AddrNo, Convert.ToInt16(value).ToString("X2"));
                     break;
                 default:
                     throw new NotSupportedException();
@@ -150,15 +150,15 @@ namespace ControlService.CommandConvert
 
             return commandStr + EndCode();
         }
-        public string SetTP5(string value)
+        public string SetTP5(string AddrNo,string value)
         {
             string commandStr = "";
             switch (Supplier)
             {
                 case "SANWA_MC":
 
-                    commandStr = "$1GET:E84__:6,5574{0}bb";
-                    commandStr = string.Format(commandStr, Convert.ToInt16(value).ToString("X2"));
+                    commandStr = "$1GET:E84__:{0},5574{1}bb";
+                    commandStr = string.Format(commandStr, AddrNo, Convert.ToInt16(value).ToString("X2"));
                     break;
                 default:
                     throw new NotSupportedException();
@@ -166,15 +166,15 @@ namespace ControlService.CommandConvert
 
             return commandStr + EndCode();
         }
-        public string SetTP6(string value)
+        public string SetTP6(string AddrNo,string value)
         {
             string commandStr = "";
             switch (Supplier)
             {
                 case "SANWA_MC":
 
-                    commandStr = "$1GET:E84__:6,5575{0}bb";
-                    commandStr = string.Format(commandStr, Convert.ToInt16(value).ToString("X2"));
+                    commandStr = "$1GET:E84__:{0},5575{1}bb";
+                    commandStr = string.Format(commandStr, AddrNo, Convert.ToInt16(value).ToString("X2"));
                     break;
                 default:
                     throw new NotSupportedException();

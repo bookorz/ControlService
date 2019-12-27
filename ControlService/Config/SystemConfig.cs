@@ -9,7 +9,7 @@ namespace ControlService.Config
     public class SystemConfig
     {
         private static SystemConfig Content;
-        public string DBConnectionString { get; set; }
+       
         public string OCR1ImgSourcePath { get; set; }
         public string OCR1ImgToJpgPath { get; set; }
         public string OCR2ImgSourcePath { get; set; }
@@ -35,6 +35,7 @@ namespace ControlService.Config
         public string FakeDataP1 { get; set; }
         public string FakeDataP2 { get; set; }
         public string FakeDataP3 { get; set; }
+        public bool ControlOnline { get; set; }
 
         public static SystemConfig Get()
         {

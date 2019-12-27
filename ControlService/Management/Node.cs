@@ -664,6 +664,47 @@ namespace ControlService.Management
 
                 switch (this.Type)
                 {
+                    case "E84":
+                        switch (txn.Method)
+                        {
+                            case Transaction.Command.E84.Reset:
+                                txn.CommandEncodeStr = Ctrl.GetEncoder().E84.Reset(txn.AdrNo);
+                                    txn.CommandType = "GET";
+                                break;
+                            case Transaction.Command.E84.AutoMode:
+                                txn.CommandEncodeStr = Ctrl.GetEncoder().E84.AutoMode(txn.AdrNo);
+                                txn.CommandType = "GET";
+                                break;
+                            case Transaction.Command.E84.ManualMode:
+                                txn.CommandEncodeStr = Ctrl.GetEncoder().E84.ManualMode(txn.AdrNo);
+                                txn.CommandType = "GET";
+                                break;
+                            case Transaction.Command.E84.SetTP1:
+                                txn.CommandEncodeStr = Ctrl.GetEncoder().E84.SetTP1(txn.AdrNo,txn.Value);
+                                txn.CommandType = "GET";
+                                break;
+                            case Transaction.Command.E84.SetTP2:
+                                txn.CommandEncodeStr = Ctrl.GetEncoder().E84.SetTP2(txn.AdrNo, txn.Value);
+                                txn.CommandType = "GET";
+                                break;
+                            case Transaction.Command.E84.SetTP3:
+                                txn.CommandEncodeStr = Ctrl.GetEncoder().E84.SetTP3(txn.AdrNo, txn.Value);
+                                txn.CommandType = "GET";
+                                break;
+                            case Transaction.Command.E84.SetTP4:
+                                txn.CommandEncodeStr = Ctrl.GetEncoder().E84.SetTP4(txn.AdrNo, txn.Value);
+                                txn.CommandType = "GET";
+                                break;
+                            case Transaction.Command.E84.SetTP5:
+                                txn.CommandEncodeStr = Ctrl.GetEncoder().E84.SetTP5(txn.AdrNo, txn.Value);
+                                txn.CommandType = "GET";
+                                break;
+                            case Transaction.Command.E84.SetTP6:
+                                txn.CommandEncodeStr = Ctrl.GetEncoder().E84.SetTP6(txn.AdrNo, txn.Value);
+                                txn.CommandType = "GET";
+                                break;
+                        }
+                        break;
                     case "WTS_ALIGNER":
                         switch (txn.Method)
                         {
@@ -1791,12 +1832,12 @@ namespace ControlService.Management
                     }
                     else
                     {
-                        TargetJob = RouteControl.CreateJob();
+                        TargetJob = TransferControl.CreateJob();
                     }
                 }
                 else
                 {
-                    TargetJob = RouteControl.CreateJob();
+                    TargetJob = TransferControl.CreateJob();
                 }
                 //if (txn.CommandType.Equals("CMD") || txn.CommandType.Equals("MOV"))
                 //{
@@ -1818,7 +1859,7 @@ namespace ControlService.Management
                 if (txn.TargetJobs.Count == 0)
                 {
 
-                    Job dummy = RouteControl.CreateJob();
+                    Job dummy = TransferControl.CreateJob();
                     dummy.Job_Id = "dummy";
                     txn.TargetJobs.Add(dummy);
 

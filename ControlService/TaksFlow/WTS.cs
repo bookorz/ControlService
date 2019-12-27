@@ -21,10 +21,15 @@ namespace ControlService.TaksFlow
         public bool Excute(TaskFlowManagement.CurrentProcessTask TaskJob, ITaskFlowReport TaskReport)
         {
             logger.Debug("ITaskFlow:" + TaskJob.TaskName.ToString() + " Index:" + TaskJob.CurrentIndex.ToString());
-            string Message = "";
+            if (!TransferControl.Instance.GetOnline() && TaskJob.TaskName != TaskFlowManagement.Command.CONTROL_MODE)
+            {
+                AbortTask(TaskReport, TaskJob, "SYSTEM", "ABS", "2012");
+                return false;
+            }
+                string Message = "";
             Node Target = null;
             Node Position = null;
-            TaskFlowManagement.CurrentProcessTask WaitTask = null;
+            //TaskFlowManagement.CurrentProcessTask WaitTask = null;
 
             if (TaskJob.Params != null)
             {
@@ -1435,7 +1440,6 @@ namespace ControlService.TaksFlow
                                     break;
                                 case 15:
                                     TaskJob.CheckList.Add(new TaskFlowManagement.ExcutedCmd("CTU", "EXCUTED", new Transaction().SetAttr(TaskJob.Id, Transaction.Command.CTU.Initial_IO, TaskJob.Params)));
-                                    WaitTask.Wait();
                                     break;
                                 default:
                                     WTS_LastCmd = 0;
@@ -1453,9 +1457,30 @@ namespace ControlService.TaksFlow
                             {
                                 case 0:
                                     TaskReport.On_Task_Ack(TaskJob);
+                                    TaskJob.CheckList.Add(new TaskFlowManagement.ExcutedCmd(Target.Name, "EXCUTED", new Transaction().SetAttr(TaskJob.Id, Transaction.Command.E84.Reset, TaskJob.Params)));
                                     break;
                                 default:
-                                    SpinWait.SpinUntil(() => false, 2000);
+                                    TaskReport.On_Task_Finished(TaskJob);
+                                    return false;
+                            }
+                            break;
+                        case TaskFlowManagement.Command.E84_MODE:
+
+
+                            switch (TaskJob.CurrentIndex)
+                            {
+                                case 0:
+                                   // TaskReport.On_Task_Ack(TaskJob);
+                                    if (TaskJob.Params["@Value"].Equals("AUTO"))
+                                    {
+                                        TaskJob.CheckList.Add(new TaskFlowManagement.ExcutedCmd(Target.Name, "EXCUTED", new Transaction().SetAttr(TaskJob.Id, Transaction.Command.E84.AutoMode, TaskJob.Params)));
+                                    }
+                                    else
+                                    {
+                                        TaskJob.CheckList.Add(new TaskFlowManagement.ExcutedCmd(Target.Name, "EXCUTED", new Transaction().SetAttr(TaskJob.Id, Transaction.Command.E84.ManualMode, TaskJob.Params)));
+                                    }
+                                    break;
+                                default:
                                     TaskReport.On_Task_Finished(TaskJob);
                                     return false;
                             }
@@ -1464,7 +1489,7 @@ namespace ControlService.TaksFlow
                             switch (TaskJob.CurrentIndex)
                             {
                                 case 0:
-                                    TaskReport.On_Task_Ack(TaskJob);
+                                    //TaskReport.On_Task_Ack(TaskJob);
                                     TaskJob.CheckList.Add(new TaskFlowManagement.ExcutedCmd("FOUP_ROBOT", "FINISHED", new Transaction().SetAttr(TaskJob.Id, Transaction.Command.FoupRobot.LightCurtainReset, TaskJob.Params)));                
                                       break;
                                 case 1:
@@ -1500,9 +1525,9 @@ namespace ControlService.TaksFlow
                                     TaskJob.CheckList.Add(new TaskFlowManagement.ExcutedCmd("FOUP_ROBOT", "EXCUTED", new Transaction().SetAttr(TaskJob.Id, Transaction.Command.FoupRobot.Get_DIO, "1")));
                                     break;
                                 case 1:
-                                    //TaskJob.CheckList.Add(new TaskFlowManagement.ExcutedCmd("CTU", "EXCUTED", new Transaction().SetAttr(TaskJob.Id, Transaction.Command.CTU.Get_DIO, "0")));
-                                    //TaskJob.CheckList.Add(new TaskFlowManagement.ExcutedCmd("WHR", "EXCUTED", new Transaction().SetAttr(TaskJob.Id, Transaction.Command.WHR.Get_DIO, "0")));
-                                    //TaskJob.CheckList.Add(new TaskFlowManagement.ExcutedCmd("FOUP_ROBOT", "EXCUTED", new Transaction().SetAttr(TaskJob.Id, Transaction.Command.FoupRobot.Get_DIO, "0")));
+                                    TaskJob.CheckList.Add(new TaskFlowManagement.ExcutedCmd("CTU", "EXCUTED", new Transaction().SetAttr(TaskJob.Id, Transaction.Command.CTU.Get_DIO, "0")));
+                                    TaskJob.CheckList.Add(new TaskFlowManagement.ExcutedCmd("WHR", "EXCUTED", new Transaction().SetAttr(TaskJob.Id, Transaction.Command.WHR.Get_DIO, "0")));
+                                    TaskJob.CheckList.Add(new TaskFlowManagement.ExcutedCmd("FOUP_ROBOT", "EXCUTED", new Transaction().SetAttr(TaskJob.Id, Transaction.Command.FoupRobot.Get_DIO, "0")));
                                     break;
                                 default:
                                     TaskReport.On_Task_Finished(TaskJob);
@@ -1523,6 +1548,27 @@ namespace ControlService.TaksFlow
                                     return false;
                             }
                             break;
+                        case TaskFlowManagement.Command.CONTROL_MODE:
+                            switch (TaskJob.CurrentIndex)
+                            {
+                                case 0:
+                                    TaskReport.On_Task_Ack(TaskJob);
+                                    if (TaskJob.Params["@Value"].Equals("1"))
+                                    {
+                                        TransferControl.Instance.SetOnline(true);
+                                    }
+                                    else
+                                    {
+                                        TransferControl.Instance.SetOnline(false);
+                                    }
+                                    break;
+
+                                default:
+                                    TaskReport.On_Task_Finished(TaskJob);
+                                    return false;
+                            }
+                            break;
+                            
                         default:
                             throw new NotSupportedException();
                     }
@@ -1575,12 +1621,12 @@ namespace ControlService.TaksFlow
             bool result = true;
             if (!SystemConfig.Get().SaftyCheckByPass)
             {
-                if (RouteControl.Instance.DIO.GetIO("DIN", "SAFETYRELAY").ToUpper().Equals("TRUE"))
-                {
-                    TaskFlowManagement.TaskRemove(TaskJob.Id);
-                    AbortTask(TaskReport, TaskJob, "SYSTEM", "CAN", "S0300170");
-                    result = false;
-                }
+               // if (TransferControl.Instance.DIO.GetIO("DIN", "SAFETYRELAY").ToUpper().Equals("TRUE"))
+                //{
+                    //TaskFlowManagement.TaskRemove(TaskJob.Id);
+                    //AbortTask(TaskReport, TaskJob, "SYSTEM", "CAN", "S0300170");
+                    //result = false;
+                //}
             }
             return result;
         }
@@ -1602,7 +1648,7 @@ namespace ControlService.TaksFlow
                 Job tmp;
                 if (!FNode.JobList.TryRemove(FromSlot, out J))
                 {
-                    J = RouteControl.CreateJob();//當沒有帳時強制建帳
+                    J = TransferControl.CreateJob();//當沒有帳時強制建帳
                     J.Job_Id = JobManagement.GetNewID();
                     J.Host_Job_Id = J.Job_Id;
                     J.Position = FNode.Name;
@@ -1614,7 +1660,7 @@ namespace ControlService.TaksFlow
                 if (FNode.Type.ToUpper().Equals("LOADPORT"))
                 {
                     //LOADPORT空的Slot要塞空資料                                       
-                    tmp = RouteControl.CreateJob();
+                    tmp = TransferControl.CreateJob();
                     tmp.Job_Id = "No wafer";
                     tmp.Host_Job_Id = "No wafer";
                     tmp.Slot = FromSlot;

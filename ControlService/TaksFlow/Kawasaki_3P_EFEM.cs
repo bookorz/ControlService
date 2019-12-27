@@ -2665,12 +2665,12 @@ namespace ControlService.TaksFlow
             bool result = true;
             if (!SystemConfig.Get().SaftyCheckByPass)
             {
-                if (RouteControl.Instance.DIO.GetIO("DIN", "SAFETYRELAY").ToUpper().Equals("TRUE"))
-                {
+                //if (TransferControl.Instance.DIO.GetIO("DIN", "SAFETYRELAY").ToUpper().Equals("TRUE"))
+                //{
                     TaskFlowManagement.TaskRemove(TaskJob.Id);
                     AbortTask( TaskReport,TaskJob, "SYSTEM", "CAN", "S0300170");
                     result = false;
-                }
+                //}
             }
             return result;
         }
@@ -2843,7 +2843,7 @@ namespace ControlService.TaksFlow
                 Job tmp;
                 if (!FNode.JobList.TryRemove(FromSlot, out J))
                 {
-                    J = RouteControl.CreateJob();//當沒有帳時強制建帳
+                    J = TransferControl.CreateJob();//當沒有帳時強制建帳
                     J.Job_Id = JobManagement.GetNewID();
                     J.Host_Job_Id = J.Job_Id;
                     J.Position = FNode.Name;
@@ -2854,7 +2854,7 @@ namespace ControlService.TaksFlow
                 if (FNode.Type.ToUpper().Equals("LOADPORT"))
                 {
                     //LOADPORT空的Slot要塞空資料                                       
-                    tmp = RouteControl.CreateJob();
+                    tmp = TransferControl.CreateJob();
                     tmp.Job_Id = "No wafer";
                     tmp.Host_Job_Id = "No wafer";
                     tmp.Slot = FromSlot;
