@@ -324,6 +324,19 @@ namespace ControlService.Controller
                     else
                     {
                         key = "0" + msgList[0].Command;
+                        //支援同時多發命令
+                        for (int seq = 0; seq <= 99; seq++)
+                        {
+                            key = key + seq.ToString("00");
+                            if (!TransactionList.ContainsKey(key))
+                            {
+                                break;
+                            }
+                            if (seq == 99)
+                            {
+                                logger.Error("seq is run out!");
+                            }
+                        }
                     }
 
                 }
@@ -532,6 +545,21 @@ namespace ControlService.Controller
                                     else
                                     {
                                         key = "0" + ReturnMsg.Command;
+                                        if (!ReturnMsg.Type.Equals(CommandReturnMessage.ReturnType.Event))
+                                        {
+                                            for (int seq = 0; seq <= 99; seq++)
+                                            {
+                                                key = key + seq.ToString("00");
+                                                if (TransactionList.ContainsKey(key))
+                                                {
+                                                    break;
+                                                }
+                                                if (seq == 99)
+                                                {
+                                                    logger.Error("seq is run out!");
+                                                }
+                                            }
+                                        }
                                     }
                                 }
                                 else

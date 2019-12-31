@@ -493,7 +493,7 @@ namespace ControlService.CommandConvert
                                             else if (each.Type.Equals(CommandReturnMessage.ReturnType.Excuted) && each.Command.Equals("E84__"))
                                             {
                                                 each.Value = content[i].Substring(content[i].Length-8 );
-                                                if (!each.Value.Equals("000000BB"))
+                                                if (!each.Value.Equals("000000BB")&& !each.Value.Equals("010000BB"))
                                                 {
                                                     each.Type = CommandReturnMessage.ReturnType.Error;
                                                 }

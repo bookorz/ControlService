@@ -138,6 +138,18 @@ namespace ControlService.TaksFlow
                                     return false;
                             }
                             break;
+                        case TaskFlowManagement.Command.STK_PRESENT:
+                            switch (TaskJob.CurrentIndex)
+                            {
+                                case 0:
+                                    TaskReport.On_Task_Ack(TaskJob);
+                                    TaskJob.CheckList.Add(new TaskFlowManagement.ExcutedCmd("SHELF", "FINISHED", new Transaction().SetAttr(TaskJob.Id, Transaction.Command.Shelf.GetFOUPPresence, "")));
+                                    break;
+                                default:
+                                    TaskReport.On_Task_Finished(TaskJob);
+                                    return false;
+                            }
+                            break;
                         case TaskFlowManagement.Command.FOUP_ID:
                             switch (TaskJob.CurrentIndex)
                             {
@@ -1458,6 +1470,24 @@ namespace ControlService.TaksFlow
                                 case 0:
                                     TaskReport.On_Task_Ack(TaskJob);
                                     TaskJob.CheckList.Add(new TaskFlowManagement.ExcutedCmd(Target.Name, "EXCUTED", new Transaction().SetAttr(TaskJob.Id, Transaction.Command.E84.Reset, TaskJob.Params)));
+                                    break;
+                                case 1:
+                                    TaskJob.CheckList.Add(new TaskFlowManagement.ExcutedCmd(Target.Name, "EXCUTED", new Transaction().SetAttr(TaskJob.Id, Transaction.Command.E84.SetTP1, TaskJob.Params["@TP1"])));
+                                    break;
+                                case 2:
+                                    TaskJob.CheckList.Add(new TaskFlowManagement.ExcutedCmd(Target.Name, "EXCUTED", new Transaction().SetAttr(TaskJob.Id, Transaction.Command.E84.SetTP2, TaskJob.Params["@TP2"])));
+                                    break;
+                                case 3:
+                                    TaskJob.CheckList.Add(new TaskFlowManagement.ExcutedCmd(Target.Name, "EXCUTED", new Transaction().SetAttr(TaskJob.Id, Transaction.Command.E84.SetTP3, TaskJob.Params["@TP3"])));
+                                    break;
+                                case 4:
+                                    TaskJob.CheckList.Add(new TaskFlowManagement.ExcutedCmd(Target.Name, "EXCUTED", new Transaction().SetAttr(TaskJob.Id, Transaction.Command.E84.SetTP4, TaskJob.Params["@TP4"])));
+                                    break;
+                                case 5:
+                                    TaskJob.CheckList.Add(new TaskFlowManagement.ExcutedCmd(Target.Name, "EXCUTED", new Transaction().SetAttr(TaskJob.Id, Transaction.Command.E84.SetTP5, TaskJob.Params["@TP5"])));
+                                    break;
+                                case 6:
+                                    TaskJob.CheckList.Add(new TaskFlowManagement.ExcutedCmd(Target.Name, "EXCUTED", new Transaction().SetAttr(TaskJob.Id, Transaction.Command.E84.SetTP6, TaskJob.Params["@TP6"])));
                                     break;
                                 default:
                                     TaskReport.On_Task_Finished(TaskJob);

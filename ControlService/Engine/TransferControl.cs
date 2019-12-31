@@ -1686,7 +1686,7 @@ namespace ControlService.Engine
                         string IO_Name = Msg.Value.Split(',')[0];
                         string IO_Value = Msg.Value.Split(',')[1];
                         Dictionary<string, string> param = new Dictionary<string, string>();
-
+                        Node node = null;
                         lock (IO_State)
                         {
 
@@ -1719,12 +1719,12 @@ namespace ControlService.Engine
                                         if (IO_State["ELPT1-Place1"].Equals("1") || IO_State["ELPT1-Place2"].Equals("1") || IO_State["ELPT1-Place3"].Equals("1") || IO_State["ELPT1-Present"].Equals("1"))
                                         {
                                             param.Add("@Value", "1");
-                                            TaskFlowManagement.Excute(Guid.NewGuid().ToString(), TaskFlowManagement.Command.SET_IO, param).Wait();
+                                            TaskFlowManagement.Excute(Guid.NewGuid().ToString(), TaskFlowManagement.Command.SET_IO, param);
                                         }
                                         else
                                         {
                                             param.Add("@Value", "0");
-                                            TaskFlowManagement.Excute(Guid.NewGuid().ToString(), TaskFlowManagement.Command.SET_IO, param).Wait();
+                                            TaskFlowManagement.Excute(Guid.NewGuid().ToString(), TaskFlowManagement.Command.SET_IO, param);
                                         }
                                     }
                                     param = new Dictionary<string, string>();
@@ -1735,14 +1735,40 @@ namespace ControlService.Engine
                                         if (IO_State["ELPT1-Place1"].Equals("1") && IO_State["ELPT1-Place2"].Equals("1") && IO_State["ELPT1-Place3"].Equals("1"))
                                         {
                                             param.Add("@Value", "1");
-                                            TaskFlowManagement.Excute(Guid.NewGuid().ToString(), TaskFlowManagement.Command.SET_IO, param).Wait();
-                                            
-
+                                            TaskFlowManagement.Excute(Guid.NewGuid().ToString(), TaskFlowManagement.Command.SET_IO, param);
+                                            param = new Dictionary<string, string>();
+                                            param.Add("@Slot", "ELPT1-IND-Load");
+                                            param.Add("@Value", "0");
+                                            TaskFlowManagement.Excute(Guid.NewGuid().ToString(), TaskFlowManagement.Command.SET_IO, param);
+                                            param = new Dictionary<string, string>();
+                                            param.Add("@Slot", "ELPT1-IND-Unload");
+                                            param.Add("@Value", "1");
+                                            TaskFlowManagement.Excute(Guid.NewGuid().ToString(), TaskFlowManagement.Command.SET_IO, param);
+                                            node = NodeManagement.Get("SHELF");
+                                            lock (node)
+                                            {
+                                                node.Status.Remove("ELPT1");
+                                                node.Status.Add("ELPT1", "1");
+                                            }
                                         }
                                         else
                                         {
                                             param.Add("@Value", "0");
-                                            TaskFlowManagement.Excute(Guid.NewGuid().ToString(), TaskFlowManagement.Command.SET_IO, param).Wait();
+                                            TaskFlowManagement.Excute(Guid.NewGuid().ToString(), TaskFlowManagement.Command.SET_IO, param);
+                                            param = new Dictionary<string, string>();
+                                            param.Add("@Slot", "ELPT1-IND-Load");
+                                            param.Add("@Value", "1");
+                                            TaskFlowManagement.Excute(Guid.NewGuid().ToString(), TaskFlowManagement.Command.SET_IO, param);
+                                            param = new Dictionary<string, string>();
+                                            param.Add("@Slot", "ELPT1-IND-Unload");
+                                            param.Add("@Value", "0");
+                                            TaskFlowManagement.Excute(Guid.NewGuid().ToString(), TaskFlowManagement.Command.SET_IO, param);
+                                            node = NodeManagement.Get("SHELF");
+                                            lock (node)
+                                            {
+                                                node.Status.Remove("ELPT1");
+                                                node.Status.Add("ELPT1", "0");
+                                            }
                                         }
 
                                     }
@@ -1760,13 +1786,52 @@ namespace ControlService.Engine
                                         if (IO_State["ELPT1-R-POS-Clamp"].Equals("1") && IO_State["ELPT1-L-POS-Clamp"].Equals("1"))
                                         {
                                             param.Add("@Value", "1");
+                                            TaskFlowManagement.Excute(Guid.NewGuid().ToString(), TaskFlowManagement.Command.SET_IO, param);
+
+                                            param = new Dictionary<string, string>();
+                                            param.Add("@Slot", "ELPT1-IND-Load");
+                                            param.Add("@Value", "0");
+                                            TaskFlowManagement.Excute(Guid.NewGuid().ToString(), TaskFlowManagement.Command.SET_IO, param);
+                                            param = new Dictionary<string, string>();
+                                            param.Add("@Slot", "ELPT1-IND-Unload");
+                                            param.Add("@Value", "0");
+                                            TaskFlowManagement.Excute(Guid.NewGuid().ToString(), TaskFlowManagement.Command.SET_IO, param);
                                         }
                                         else
                                         {
                                             param.Add("@Value", "0");
+                                            TaskFlowManagement.Excute(Guid.NewGuid().ToString(), TaskFlowManagement.Command.SET_IO, param);
+                                            if (IO_State.ContainsKey("ELPT1-Place1") && IO_State.ContainsKey("ELPT1-Place2") && IO_State.ContainsKey("ELPT1-Place3"))
+                                            {
+                                                if (IO_State["ELPT1-Place1"].Equals("1") && IO_State["ELPT1-Place2"].Equals("1") && IO_State["ELPT1-Place3"].Equals("1"))
+                                                {
+                                                    
+                                                    param = new Dictionary<string, string>();
+                                                    param.Add("@Slot", "ELPT1-IND-Load");
+                                                    param.Add("@Value", "0");
+                                                    TaskFlowManagement.Excute(Guid.NewGuid().ToString(), TaskFlowManagement.Command.SET_IO, param);
+                                                    param = new Dictionary<string, string>();
+                                                    param.Add("@Slot", "ELPT1-IND-Unload");
+                                                    param.Add("@Value", "1");
+                                                    TaskFlowManagement.Excute(Guid.NewGuid().ToString(), TaskFlowManagement.Command.SET_IO, param);
+                                                }
+                                                else
+                                                {
+                                                    
+                                                    param = new Dictionary<string, string>();
+                                                    param.Add("@Slot", "ELPT1-IND-Load");
+                                                    param.Add("@Value", "1");
+                                                    TaskFlowManagement.Excute(Guid.NewGuid().ToString(), TaskFlowManagement.Command.SET_IO, param);
+                                                    param = new Dictionary<string, string>();
+                                                    param.Add("@Slot", "ELPT1-IND-Unload");
+                                                    param.Add("@Value", "0");
+                                                    TaskFlowManagement.Excute(Guid.NewGuid().ToString(), TaskFlowManagement.Command.SET_IO, param);
+                                                }
+
+                                            }
                                         }
 
-                                        TaskFlowManagement.Excute(Guid.NewGuid().ToString(), TaskFlowManagement.Command.SET_IO, param).Wait();
+                                       
                                     }
 
 
@@ -1782,12 +1847,12 @@ namespace ControlService.Engine
                                         if (IO_State["ELPT2-Place1"].Equals("1") || IO_State["ELPT2-Place2"].Equals("1") || IO_State["ELPT2-Place3"].Equals("1") || IO_State["ELPT2-Present"].Equals("1"))
                                         {
                                             param.Add("@Value", "1");
-                                            TaskFlowManagement.Excute(Guid.NewGuid().ToString(), TaskFlowManagement.Command.SET_IO, param).Wait();
+                                            TaskFlowManagement.Excute(Guid.NewGuid().ToString(), TaskFlowManagement.Command.SET_IO, param);
                                         }
                                         else
                                         {
                                             param.Add("@Value", "0");
-                                            TaskFlowManagement.Excute(Guid.NewGuid().ToString(), TaskFlowManagement.Command.SET_IO, param).Wait();
+                                            TaskFlowManagement.Excute(Guid.NewGuid().ToString(), TaskFlowManagement.Command.SET_IO, param);
                                         }
                                     }
                                     param = new Dictionary<string, string>();
@@ -1798,13 +1863,42 @@ namespace ControlService.Engine
                                         if (IO_State["ELPT2-Place1"].Equals("1") && IO_State["ELPT2-Place2"].Equals("1") && IO_State["ELPT2-Place3"].Equals("1"))
                                         {
                                             param.Add("@Value", "1");
-                                            TaskFlowManagement.Excute(Guid.NewGuid().ToString(), TaskFlowManagement.Command.SET_IO, param).Wait();
+                                            TaskFlowManagement.Excute(Guid.NewGuid().ToString(), TaskFlowManagement.Command.SET_IO, param);
                                             
+                                            param = new Dictionary<string, string>();
+                                            param.Add("@Slot", "ELPT2-IND-Load");
+                                            param.Add("@Value", "0");
+                                            TaskFlowManagement.Excute(Guid.NewGuid().ToString(), TaskFlowManagement.Command.SET_IO, param);
+                                            param = new Dictionary<string, string>();
+                                            param.Add("@Slot", "ELPT2-IND-Unload");
+                                            param.Add("@Value", "1");
+                                            TaskFlowManagement.Excute(Guid.NewGuid().ToString(), TaskFlowManagement.Command.SET_IO, param);
+                                            node = NodeManagement.Get("SHELF");
+                                            lock (node)
+                                            {
+                                                node.Status.Remove("ELPT2");
+                                                node.Status.Add("ELPT2", "1");
+                                            }
                                         }
                                         else
                                         {
                                             param.Add("@Value", "0");
-                                            TaskFlowManagement.Excute(Guid.NewGuid().ToString(), TaskFlowManagement.Command.SET_IO, param).Wait();
+                                            TaskFlowManagement.Excute(Guid.NewGuid().ToString(), TaskFlowManagement.Command.SET_IO, param);
+
+                                            param = new Dictionary<string, string>();
+                                            param.Add("@Slot", "ELPT2-IND-Load");
+                                            param.Add("@Value", "1");
+                                            TaskFlowManagement.Excute(Guid.NewGuid().ToString(), TaskFlowManagement.Command.SET_IO, param);
+                                            param = new Dictionary<string, string>();
+                                            param.Add("@Slot", "ELPT2-IND-Unload");
+                                            param.Add("@Value", "0");
+                                            TaskFlowManagement.Excute(Guid.NewGuid().ToString(), TaskFlowManagement.Command.SET_IO, param);
+                                            node = NodeManagement.Get("SHELF");
+                                            lock (node)
+                                            {
+                                                node.Status.Remove("ELPT2");
+                                                node.Status.Add("ELPT2", "0");
+                                            }
                                         }
 
                                     }
@@ -1822,13 +1916,52 @@ namespace ControlService.Engine
                                         if (IO_State["ELPT2-R-POS-Clamp"].Equals("1") && IO_State["ELPT2-L-POS-Clamp"].Equals("1"))
                                         {
                                             param.Add("@Value", "1");
+                                            TaskFlowManagement.Excute(Guid.NewGuid().ToString(), TaskFlowManagement.Command.SET_IO, param);
+
+                                            param = new Dictionary<string, string>();
+                                            param.Add("@Slot", "ELPT2-IND-Load");
+                                            param.Add("@Value", "0");
+                                            TaskFlowManagement.Excute(Guid.NewGuid().ToString(), TaskFlowManagement.Command.SET_IO, param);
+                                            param = new Dictionary<string, string>();
+                                            param.Add("@Slot", "ELPT2-IND-Unload");
+                                            param.Add("@Value", "0");
+                                            TaskFlowManagement.Excute(Guid.NewGuid().ToString(), TaskFlowManagement.Command.SET_IO, param);
                                         }
                                         else
                                         {
                                             param.Add("@Value", "0");
+                                            TaskFlowManagement.Excute(Guid.NewGuid().ToString(), TaskFlowManagement.Command.SET_IO, param);
+                                            if (IO_State.ContainsKey("ELPT2-Place1") && IO_State.ContainsKey("ELPT2-Place2") && IO_State.ContainsKey("ELPT2-Place3"))
+                                            {
+                                                if (IO_State["ELPT2-Place1"].Equals("1") && IO_State["ELPT2-Place2"].Equals("1") && IO_State["ELPT2-Place3"].Equals("1"))
+                                                {
+
+                                                    param = new Dictionary<string, string>();
+                                                    param.Add("@Slot", "ELPT2-IND-Load");
+                                                    param.Add("@Value", "0");
+                                                    TaskFlowManagement.Excute(Guid.NewGuid().ToString(), TaskFlowManagement.Command.SET_IO, param);
+                                                    param = new Dictionary<string, string>();
+                                                    param.Add("@Slot", "ELPT2-IND-Unload");
+                                                    param.Add("@Value", "1");
+                                                    TaskFlowManagement.Excute(Guid.NewGuid().ToString(), TaskFlowManagement.Command.SET_IO, param);
+                                                }
+                                                else
+                                                {
+
+                                                    param = new Dictionary<string, string>();
+                                                    param.Add("@Slot", "ELPT2-IND-Load");
+                                                    param.Add("@Value", "1");
+                                                    TaskFlowManagement.Excute(Guid.NewGuid().ToString(), TaskFlowManagement.Command.SET_IO, param);
+                                                    param = new Dictionary<string, string>();
+                                                    param.Add("@Slot", "ELPT2-IND-Unload");
+                                                    param.Add("@Value", "0");
+                                                    TaskFlowManagement.Excute(Guid.NewGuid().ToString(), TaskFlowManagement.Command.SET_IO, param);
+                                                }
+
+                                            }
                                         }
 
-                                        TaskFlowManagement.Excute(Guid.NewGuid().ToString(), TaskFlowManagement.Command.SET_IO, param).Wait();
+                                        
                                     }
 
 

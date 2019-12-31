@@ -318,7 +318,8 @@ namespace ControlService.Management
             FOUPROBOT_SET_SPEED,
             GET_IO,
             SET_IO,
-            CONTROL_MODE
+            CONTROL_MODE,
+            STK_PRESENT
         }
     }
 }
