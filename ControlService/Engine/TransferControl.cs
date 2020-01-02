@@ -1712,38 +1712,12 @@ namespace ControlService.Engine
                                 case "ELPT1-Place2":
                                 case "ELPT1-Place3":
                                 case "ELPT1-Present":
-                                    if (IO_State.ContainsKey("ELPT1-Place1") && IO_State.ContainsKey("ELPT1-Place2") && IO_State.ContainsKey("ELPT1-Place3") && IO_State.ContainsKey("ELPT1-Present"))
-                                    {
-                                        param = new Dictionary<string, string>();
-                                        param.Add("@Slot", "ELPT1-IND-Presence");
-                                        if (IO_State["ELPT1-Place1"].Equals("1") || IO_State["ELPT1-Place2"].Equals("1") || IO_State["ELPT1-Place3"].Equals("1") || IO_State["ELPT1-Present"].Equals("1"))
-                                        {
-                                            param.Add("@Value", "1");
-                                            TaskFlowManagement.Excute(Guid.NewGuid().ToString(), TaskFlowManagement.Command.SET_IO, param);
-                                        }
-                                        else
-                                        {
-                                            param.Add("@Value", "0");
-                                            TaskFlowManagement.Excute(Guid.NewGuid().ToString(), TaskFlowManagement.Command.SET_IO, param);
-                                        }
-                                    }
-                                    param = new Dictionary<string, string>();
-                                    param.Add("@Slot", "ELPT1-IND-Placement");
+                                   
 
                                     if (IO_State.ContainsKey("ELPT1-Place1") && IO_State.ContainsKey("ELPT1-Place2") && IO_State.ContainsKey("ELPT1-Place3"))
                                     {
                                         if (IO_State["ELPT1-Place1"].Equals("1") && IO_State["ELPT1-Place2"].Equals("1") && IO_State["ELPT1-Place3"].Equals("1"))
                                         {
-                                            param.Add("@Value", "1");
-                                            TaskFlowManagement.Excute(Guid.NewGuid().ToString(), TaskFlowManagement.Command.SET_IO, param);
-                                            param = new Dictionary<string, string>();
-                                            param.Add("@Slot", "ELPT1-IND-Load");
-                                            param.Add("@Value", "0");
-                                            TaskFlowManagement.Excute(Guid.NewGuid().ToString(), TaskFlowManagement.Command.SET_IO, param);
-                                            param = new Dictionary<string, string>();
-                                            param.Add("@Slot", "ELPT1-IND-Unload");
-                                            param.Add("@Value", "1");
-                                            TaskFlowManagement.Excute(Guid.NewGuid().ToString(), TaskFlowManagement.Command.SET_IO, param);
                                             node = NodeManagement.Get("SHELF");
                                             lock (node)
                                             {
@@ -1753,16 +1727,7 @@ namespace ControlService.Engine
                                         }
                                         else
                                         {
-                                            param.Add("@Value", "0");
-                                            TaskFlowManagement.Excute(Guid.NewGuid().ToString(), TaskFlowManagement.Command.SET_IO, param);
-                                            param = new Dictionary<string, string>();
-                                            param.Add("@Slot", "ELPT1-IND-Load");
-                                            param.Add("@Value", "1");
-                                            TaskFlowManagement.Excute(Guid.NewGuid().ToString(), TaskFlowManagement.Command.SET_IO, param);
-                                            param = new Dictionary<string, string>();
-                                            param.Add("@Slot", "ELPT1-IND-Unload");
-                                            param.Add("@Value", "0");
-                                            TaskFlowManagement.Excute(Guid.NewGuid().ToString(), TaskFlowManagement.Command.SET_IO, param);
+                                            
                                             node = NodeManagement.Get("SHELF");
                                             lock (node)
                                             {
@@ -1773,106 +1738,17 @@ namespace ControlService.Engine
 
                                     }
                                     break;
-                                case "ELPT1-R-POS-Clamp":
-                                case "ELPT1-L-POS-Clamp":
-                                case "ELPT1-R-POS-Unclamp":
-                                case "ELPT1-L-POS-Unclamp":
-
-
-                                    if (IO_State.ContainsKey("ELPT1-R-POS-Clamp") && IO_State.ContainsKey("ELPT1-L-POS-Clamp") && IO_State.ContainsKey("ELPT1-R-POS-Unclamp") && IO_State.ContainsKey("ELPT1-L-POS-Unclamp"))
-                                    {
-                                        param = new Dictionary<string, string>();
-                                        param.Add("@Slot", "ELPT1-IND-Clamp");
-                                        if (IO_State["ELPT1-R-POS-Clamp"].Equals("1") && IO_State["ELPT1-L-POS-Clamp"].Equals("1"))
-                                        {
-                                            param.Add("@Value", "1");
-                                            TaskFlowManagement.Excute(Guid.NewGuid().ToString(), TaskFlowManagement.Command.SET_IO, param);
-
-                                            param = new Dictionary<string, string>();
-                                            param.Add("@Slot", "ELPT1-IND-Load");
-                                            param.Add("@Value", "0");
-                                            TaskFlowManagement.Excute(Guid.NewGuid().ToString(), TaskFlowManagement.Command.SET_IO, param);
-                                            param = new Dictionary<string, string>();
-                                            param.Add("@Slot", "ELPT1-IND-Unload");
-                                            param.Add("@Value", "0");
-                                            TaskFlowManagement.Excute(Guid.NewGuid().ToString(), TaskFlowManagement.Command.SET_IO, param);
-                                        }
-                                        else
-                                        {
-                                            param.Add("@Value", "0");
-                                            TaskFlowManagement.Excute(Guid.NewGuid().ToString(), TaskFlowManagement.Command.SET_IO, param);
-                                            if (IO_State.ContainsKey("ELPT1-Place1") && IO_State.ContainsKey("ELPT1-Place2") && IO_State.ContainsKey("ELPT1-Place3"))
-                                            {
-                                                if (IO_State["ELPT1-Place1"].Equals("1") && IO_State["ELPT1-Place2"].Equals("1") && IO_State["ELPT1-Place3"].Equals("1"))
-                                                {
-                                                    
-                                                    param = new Dictionary<string, string>();
-                                                    param.Add("@Slot", "ELPT1-IND-Load");
-                                                    param.Add("@Value", "0");
-                                                    TaskFlowManagement.Excute(Guid.NewGuid().ToString(), TaskFlowManagement.Command.SET_IO, param);
-                                                    param = new Dictionary<string, string>();
-                                                    param.Add("@Slot", "ELPT1-IND-Unload");
-                                                    param.Add("@Value", "1");
-                                                    TaskFlowManagement.Excute(Guid.NewGuid().ToString(), TaskFlowManagement.Command.SET_IO, param);
-                                                }
-                                                else
-                                                {
-                                                    
-                                                    param = new Dictionary<string, string>();
-                                                    param.Add("@Slot", "ELPT1-IND-Load");
-                                                    param.Add("@Value", "1");
-                                                    TaskFlowManagement.Excute(Guid.NewGuid().ToString(), TaskFlowManagement.Command.SET_IO, param);
-                                                    param = new Dictionary<string, string>();
-                                                    param.Add("@Slot", "ELPT1-IND-Unload");
-                                                    param.Add("@Value", "0");
-                                                    TaskFlowManagement.Excute(Guid.NewGuid().ToString(), TaskFlowManagement.Command.SET_IO, param);
-                                                }
-
-                                            }
-                                        }
-
-                                       
-                                    }
-
-
-                                    break;
                                 case "ELPT2-Place1":
                                 case "ELPT2-Place2":
                                 case "ELPT2-Place3":
                                 case "ELPT2-Present":
-                                    if (IO_State.ContainsKey("ELPT2-Place1") && IO_State.ContainsKey("ELPT2-Place2") && IO_State.ContainsKey("ELPT2-Place3") && IO_State.ContainsKey("ELPT2-Present"))
-                                    {
-                                        param = new Dictionary<string, string>();
-                                        param.Add("@Slot", "ELPT2-IND-Presence");
-                                        if (IO_State["ELPT2-Place1"].Equals("1") || IO_State["ELPT2-Place2"].Equals("1") || IO_State["ELPT2-Place3"].Equals("1") || IO_State["ELPT2-Present"].Equals("1"))
-                                        {
-                                            param.Add("@Value", "1");
-                                            TaskFlowManagement.Excute(Guid.NewGuid().ToString(), TaskFlowManagement.Command.SET_IO, param);
-                                        }
-                                        else
-                                        {
-                                            param.Add("@Value", "0");
-                                            TaskFlowManagement.Excute(Guid.NewGuid().ToString(), TaskFlowManagement.Command.SET_IO, param);
-                                        }
-                                    }
-                                    param = new Dictionary<string, string>();
-                                    param.Add("@Slot", "ELPT2-IND-Placement");
+                                    
 
                                     if (IO_State.ContainsKey("ELPT2-Place1") && IO_State.ContainsKey("ELPT2-Place2") && IO_State.ContainsKey("ELPT2-Place3"))
                                     {
                                         if (IO_State["ELPT2-Place1"].Equals("1") && IO_State["ELPT2-Place2"].Equals("1") && IO_State["ELPT2-Place3"].Equals("1"))
                                         {
-                                            param.Add("@Value", "1");
-                                            TaskFlowManagement.Excute(Guid.NewGuid().ToString(), TaskFlowManagement.Command.SET_IO, param);
-                                            
-                                            param = new Dictionary<string, string>();
-                                            param.Add("@Slot", "ELPT2-IND-Load");
-                                            param.Add("@Value", "0");
-                                            TaskFlowManagement.Excute(Guid.NewGuid().ToString(), TaskFlowManagement.Command.SET_IO, param);
-                                            param = new Dictionary<string, string>();
-                                            param.Add("@Slot", "ELPT2-IND-Unload");
-                                            param.Add("@Value", "1");
-                                            TaskFlowManagement.Excute(Guid.NewGuid().ToString(), TaskFlowManagement.Command.SET_IO, param);
+                                           
                                             node = NodeManagement.Get("SHELF");
                                             lock (node)
                                             {
@@ -1882,17 +1758,7 @@ namespace ControlService.Engine
                                         }
                                         else
                                         {
-                                            param.Add("@Value", "0");
-                                            TaskFlowManagement.Excute(Guid.NewGuid().ToString(), TaskFlowManagement.Command.SET_IO, param);
-
-                                            param = new Dictionary<string, string>();
-                                            param.Add("@Slot", "ELPT2-IND-Load");
-                                            param.Add("@Value", "1");
-                                            TaskFlowManagement.Excute(Guid.NewGuid().ToString(), TaskFlowManagement.Command.SET_IO, param);
-                                            param = new Dictionary<string, string>();
-                                            param.Add("@Slot", "ELPT2-IND-Unload");
-                                            param.Add("@Value", "0");
-                                            TaskFlowManagement.Excute(Guid.NewGuid().ToString(), TaskFlowManagement.Command.SET_IO, param);
+                                           
                                             node = NodeManagement.Get("SHELF");
                                             lock (node)
                                             {
@@ -1902,69 +1768,6 @@ namespace ControlService.Engine
                                         }
 
                                     }
-                                    break;
-                                case "ELPT2-R-POS-Clamp":
-                                case "ELPT2-L-POS-Clamp":
-                                case "ELPT2-R-POS-Unclamp":
-                                case "ELPT2-L-POS-Unclamp":
-
-
-                                    if (IO_State.ContainsKey("ELPT2-R-POS-Clamp") && IO_State.ContainsKey("ELPT2-L-POS-Clamp") && IO_State.ContainsKey("ELPT2-R-POS-Unclamp") && IO_State.ContainsKey("ELPT2-L-POS-Unclamp"))
-                                    {
-                                        param = new Dictionary<string, string>();
-                                        param.Add("@Slot", "ELPT2-IND-Clamp");
-                                        if (IO_State["ELPT2-R-POS-Clamp"].Equals("1") && IO_State["ELPT2-L-POS-Clamp"].Equals("1"))
-                                        {
-                                            param.Add("@Value", "1");
-                                            TaskFlowManagement.Excute(Guid.NewGuid().ToString(), TaskFlowManagement.Command.SET_IO, param);
-
-                                            param = new Dictionary<string, string>();
-                                            param.Add("@Slot", "ELPT2-IND-Load");
-                                            param.Add("@Value", "0");
-                                            TaskFlowManagement.Excute(Guid.NewGuid().ToString(), TaskFlowManagement.Command.SET_IO, param);
-                                            param = new Dictionary<string, string>();
-                                            param.Add("@Slot", "ELPT2-IND-Unload");
-                                            param.Add("@Value", "0");
-                                            TaskFlowManagement.Excute(Guid.NewGuid().ToString(), TaskFlowManagement.Command.SET_IO, param);
-                                        }
-                                        else
-                                        {
-                                            param.Add("@Value", "0");
-                                            TaskFlowManagement.Excute(Guid.NewGuid().ToString(), TaskFlowManagement.Command.SET_IO, param);
-                                            if (IO_State.ContainsKey("ELPT2-Place1") && IO_State.ContainsKey("ELPT2-Place2") && IO_State.ContainsKey("ELPT2-Place3"))
-                                            {
-                                                if (IO_State["ELPT2-Place1"].Equals("1") && IO_State["ELPT2-Place2"].Equals("1") && IO_State["ELPT2-Place3"].Equals("1"))
-                                                {
-
-                                                    param = new Dictionary<string, string>();
-                                                    param.Add("@Slot", "ELPT2-IND-Load");
-                                                    param.Add("@Value", "0");
-                                                    TaskFlowManagement.Excute(Guid.NewGuid().ToString(), TaskFlowManagement.Command.SET_IO, param);
-                                                    param = new Dictionary<string, string>();
-                                                    param.Add("@Slot", "ELPT2-IND-Unload");
-                                                    param.Add("@Value", "1");
-                                                    TaskFlowManagement.Excute(Guid.NewGuid().ToString(), TaskFlowManagement.Command.SET_IO, param);
-                                                }
-                                                else
-                                                {
-
-                                                    param = new Dictionary<string, string>();
-                                                    param.Add("@Slot", "ELPT2-IND-Load");
-                                                    param.Add("@Value", "1");
-                                                    TaskFlowManagement.Excute(Guid.NewGuid().ToString(), TaskFlowManagement.Command.SET_IO, param);
-                                                    param = new Dictionary<string, string>();
-                                                    param.Add("@Slot", "ELPT2-IND-Unload");
-                                                    param.Add("@Value", "0");
-                                                    TaskFlowManagement.Excute(Guid.NewGuid().ToString(), TaskFlowManagement.Command.SET_IO, param);
-                                                }
-
-                                            }
-                                        }
-
-                                        
-                                    }
-
-
                                     break;
                             }
 

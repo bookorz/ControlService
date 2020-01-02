@@ -1023,6 +1023,8 @@ namespace ControlService.TaksFlow
                                 case 2:
                                     TaskJob.CheckList.Add(new TaskFlowManagement.ExcutedCmd("ELPT1", "FINISHED", new Transaction().SetAttr(TaskJob.Id, Transaction.Command.ELPT.UnClamp, "")));
                                     TaskJob.CheckList.Add(new TaskFlowManagement.ExcutedCmd("ELPT2", "FINISHED", new Transaction().SetAttr(TaskJob.Id, Transaction.Command.ELPT.UnClamp, "")));
+                                    TaskJob.CheckList.Add(new TaskFlowManagement.ExcutedCmd("FOUP_ROBOT", "EXCUTED", new Transaction().SetAttr(TaskJob.Id, Transaction.Command.FoupRobot.Initial_IO, "")));
+
                                     break;
                                 case 3:
                                     TaskJob.CheckList.Add(new TaskFlowManagement.ExcutedCmd("FOUP_ROBOT", "FINISHED", new Transaction().SetAttr(TaskJob.Id, Transaction.Command.FoupRobot.SHome, "")));
@@ -1187,7 +1189,6 @@ namespace ControlService.TaksFlow
                                     }
                                     break;
                                 case 15:
-                                    TaskJob.CheckList.Add(new TaskFlowManagement.ExcutedCmd("FOUP_ROBOT", "EXCUTED", new Transaction().SetAttr(TaskJob.Id, Transaction.Command.FoupRobot.Initial_IO, "")));
                                     break;
                                 default:
                                     STK_LastCmd = 0;
